@@ -105,8 +105,14 @@ tokens {
 
     int indexLA = 1;
 
-    while(Character.isSpaceChar(input.LA(indexLA)) || input.LA(indexLA) == '\r' || input.LA(indexLA) == '\n') {
-      indexLA++;
+    if (stripSpacesAroundTags) {
+      while(Character.isSpaceChar(input.LA(indexLA)) ) {
+        indexLA++;
+      }
+    } else {
+      while(Character.isSpaceChar(input.LA(indexLA)) || input.LA(indexLA) == '\r' || input.LA(indexLA) == '\n') {
+        indexLA++;
+      }
     }
 
     return stripSpacesAroundTags
@@ -413,10 +419,10 @@ other_than_tag_end
  ;
 
 /* lexer rules */
-OutStartDefaultStrip : {stripSpacesAroundTags}?=> WhitespaceChar* '{{' {inTag=true; $type=OutStart;};
-OutEndDefaultStrip   : {stripSpacesAroundTags}?=> '}}' WhitespaceChar* {inTag=false; $type=OutEnd;};
-TagStartDefaultStrip : {stripSpacesAroundTags}?=> WhitespaceChar* '{%' {inTag=true; $type=TagStart;};
-TagEndDefaultStrip   : {stripSpacesAroundTags}?=> '%}' WhitespaceChar* {inTag=false; $type=TagEnd;};
+OutStartDefaultStrip : {stripSpacesAroundTags}?=> MyWhitespaceChar* '{{' {inTag=true; $type=OutStart;};
+OutEndDefaultStrip   : {stripSpacesAroundTags}?=> '}}' MyWhitespaceChar* MyNewLineChar? {inTag=false; $type=OutEnd;};
+TagStartDefaultStrip : {stripSpacesAroundTags}?=> MyWhitespaceChar* '{%' {inTag=true; $type=TagStart;};
+TagEndDefaultStrip   : {stripSpacesAroundTags}?=> '%}' MyWhitespaceChar* MyNewLineChar? {inTag=false; $type=TagEnd;};
 
 OutStartStrip : WhitespaceChar* '{{-' {inTag=true; $type=OutStart;};
 OutEndStrip   : '-}}' WhitespaceChar* {inTag=false; $type=OutEnd;};
@@ -507,6 +513,9 @@ NoSpace
 
 /* fragment rules */
 fragment WhitespaceChar : ' ' | '\t' | '\r' | '\n';
+
+fragment MyWhitespaceChar : ' ' | '\t';
+fragment MyNewLineChar : '\r' | '\n';
 
 fragment Letter : 'a'..'z' | 'A'..'Z';
 fragment Digit  : '0'..'9';

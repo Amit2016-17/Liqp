@@ -74,11 +74,11 @@ public class WhitespaceControlTest {
     @Test
     public void allStrip() throws RecognitionException {
 
-        String source = "a  \n  {%- assign letter = 'b' -%}  \n{{- letter -}}\n  c";
+        String source = "a  \n  {%- assign letter = 'b' -%}  \nx\n {{- letter -}}\n  c";
         Template template = Template.parse(source);
         String rendered = String.valueOf(template.render().replace(' ', '.'));
-
-        assertThat(rendered, is("abc"));
+         
+        assertThat(rendered, is("axbc"));
     }
 
     @Test
@@ -88,7 +88,18 @@ public class WhitespaceControlTest {
         ParseSettings settings = new ParseSettings.Builder().withStripSpaceAroundTags(true).build();
         Template template = Template.parse(source, settings);
         String rendered = String.valueOf(template.render().replace(' ', '.'));
+        
+        assertThat(rendered, is("a..\nb..c"));
+    }
 
-        assertThat(rendered, is("abc"));
+    @Test
+    public void defaultMultiNlStrip() throws RecognitionException {
+
+        String source = "a  \n\n  {% assign letter = 'b' %}  \n{{ letter }}\n\n  c";
+        ParseSettings settings = new ParseSettings.Builder().withStripSpaceAroundTags(true).build();
+        Template template = Template.parse(source, settings);
+        String rendered = String.valueOf(template.render().replace(' ', '.'));
+
+        assertThat(rendered, is("a..\n\nb\n..c"));
     }
 }
