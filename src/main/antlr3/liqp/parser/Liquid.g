@@ -116,7 +116,7 @@ tokens {
     }
 
     return stripSpacesAroundTags
-        ? input.LA(indexLA) == '{' && (input.LA(indexLA + 1) == '{' || input.LA(indexLA + 1) == '\u0025')
+        ? input.LA(indexLA) == '{' && input.LA(indexLA + 1) == '\u0025'
         : input.LA(indexLA) == '{' && (input.LA(indexLA + 1) == '{' || input.LA(indexLA + 1) == '\u0025') && input.LA(indexLA + 2) == '-';
   }
 
@@ -419,8 +419,11 @@ other_than_tag_end
  ;
 
 /* lexer rules */
+/*
 OutStartDefaultStrip : {stripSpacesAroundTags}?=> MyWhitespaceChar* '{{' {inTag=true; $type=OutStart;};
 OutEndDefaultStrip   : {stripSpacesAroundTags}?=> '}}' MyWhitespaceChar* MyNewLineChar? {inTag=false; $type=OutEnd;};
+*/
+
 TagStartDefaultStrip : {stripSpacesAroundTags}?=> MyWhitespaceChar* '{%' {inTag=true; $type=TagStart;};
 TagEndDefaultStrip   : {stripSpacesAroundTags}?=> '%}' MyWhitespaceChar* MyNewLineChar? {inTag=false; $type=TagEnd;};
 

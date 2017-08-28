@@ -84,12 +84,12 @@ public class WhitespaceControlTest {
     @Test
     public void defaultStrip() throws RecognitionException {
 
-        String source = "a  \n  {% assign letter = 'b' %}  \n{{ letter }}\n  c";
+        String source = "a  \n  {% assign letter = 'b' %}  \n{{ letter }} \n  c";
         ParseSettings settings = new ParseSettings.Builder().withStripSpaceAroundTags(true).build();
         Template template = Template.parse(source, settings);
         String rendered = String.valueOf(template.render().replace(' ', '.'));
         
-        assertThat(rendered, is("a..\nb..c"));
+        assertThat(rendered, is("a..\nb.\n..c"));
     }
 
     @Test
@@ -100,6 +100,6 @@ public class WhitespaceControlTest {
         Template template = Template.parse(source, settings);
         String rendered = String.valueOf(template.render().replace(' ', '.'));
 
-        assertThat(rendered, is("a..\n\nb\n..c"));
+        assertThat(rendered, is("a..\n\nb\n\n..c"));
     }
 }
