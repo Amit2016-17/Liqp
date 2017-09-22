@@ -28,7 +28,7 @@ public class WhitespaceControlTest {
         Template template = Template.parse(source);
         String rendered = String.valueOf(template.render().replace(' ', '.'));
 
-        assertThat(rendered, is("a..\nb\n..c"));
+        assertThat(rendered, is("a..\n..\nb\n..c"));
     }
 
     @Test
@@ -48,7 +48,7 @@ public class WhitespaceControlTest {
         Template template = Template.parse(source);
         String rendered = String.valueOf(template.render().replace(' ', '.'));
 
-        assertThat(rendered, is("ab\n..c"));
+        assertThat(rendered, is("a..\nb\n..c"));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class WhitespaceControlTest {
         Template template = Template.parse(source);
         String rendered = String.valueOf(template.render().replace(' ', '.'));
 
-        assertThat(rendered, is("ab\n..c"));
+        assertThat(rendered, is("a..\n..\nb\n..c"));
     }
 
     @Test
@@ -68,7 +68,7 @@ public class WhitespaceControlTest {
         Template template = Template.parse(source);
         String rendered = String.valueOf(template.render().replace(' ', '.'));
 
-        assertThat(rendered, is("a..\n..bc"));
+        assertThat(rendered, is("a..\n..b..c"));
     }
 
     @Test
@@ -78,7 +78,7 @@ public class WhitespaceControlTest {
         Template template = Template.parse(source);
         String rendered = String.valueOf(template.render().replace(' ', '.'));
          
-        assertThat(rendered, is("axbc"));
+        assertThat(rendered, is("a..\nx\nb..c"));
     }
 
     @Test

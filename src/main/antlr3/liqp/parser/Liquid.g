@@ -105,7 +105,7 @@ tokens {
 
     int indexLA = 1;
 
-    if (stripSpacesAroundTags) {
+    if (true || stripSpacesAroundTags) {
       while(Character.isSpaceChar(input.LA(indexLA)) ) {
         indexLA++;
       }
@@ -424,13 +424,19 @@ OutStartDefaultStrip : {stripSpacesAroundTags}?=> MyWhitespaceChar* '{{' {inTag=
 OutEndDefaultStrip   : {stripSpacesAroundTags}?=> '}}' MyWhitespaceChar* MyNewLineChar? {inTag=false; $type=OutEnd;};
 */
 
-TagStartDefaultStrip : {stripSpacesAroundTags}?=> MyWhitespaceChar* '{%' {inTag=true; $type=TagStart;};
+TagStartDefaultStrip : {stripSpacesAroundTags}?=> MyNewLineChar? MyWhitespaceChar* '{%' {inTag=true; $type=TagStart;};
 TagEndDefaultStrip   : {stripSpacesAroundTags}?=> '%}' MyWhitespaceChar* MyNewLineChar? {inTag=false; $type=TagEnd;};
 
+/*
 OutStartStrip : WhitespaceChar* '{{-' {inTag=true; $type=OutStart;};
 OutEndStrip   : '-}}' WhitespaceChar* {inTag=false; $type=OutEnd;};
 TagStartStrip : WhitespaceChar* '{%-' {inTag=true; $type=TagStart;};
 TagEndStrip   : '-%}' WhitespaceChar* {inTag=false; $type=TagEnd;};
+*/
+OutStartStrip : MyNewLineChar? MyWhitespaceChar* '{{-' {inTag=true; $type=OutStart;};
+OutEndStrip   : '-}}' MyWhitespaceChar* MyNewLineChar? {inTag=false; $type=OutEnd;};
+TagStartStrip : MyNewLineChar? MyWhitespaceChar*  '{%-' {inTag=true; $type=TagStart;};
+TagEndStrip   : '-%}' MyWhitespaceChar* MyNewLineChar? {inTag=false; $type=TagEnd;};
 
 OutStart : '{{' {inTag=true;};
 OutEnd   : '}}' {inTag=false;};
