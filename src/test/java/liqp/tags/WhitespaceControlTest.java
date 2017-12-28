@@ -19,6 +19,12 @@ public class WhitespaceControlTest {
         String rendered = String.valueOf(template.render().replace(' ', '.'));
 
         assertThat(rendered, is("a..\n....\nb\n..c"));
+
+        source = "a  \r\n  {% assign letter = 'b' %}  \r\n{{ letter }}\r\n  c";
+        template = Template.parse(source);
+        rendered = String.valueOf(template.render().replace(' ', '.'));
+
+        assertThat(rendered, is("a..\r\n....\r\nb\r\n..c"));
     }
 
     @Test
@@ -29,6 +35,12 @@ public class WhitespaceControlTest {
         String rendered = String.valueOf(template.render().replace(' ', '.'));
 
         assertThat(rendered, is("a..\n..\nb\n..c"));
+
+        source = "a  \r\n  {%- assign letter = 'b' %}  \r\n{{ letter }}\r\n  c";
+        template = Template.parse(source);
+        rendered = String.valueOf(template.render().replace(' ', '.'));
+
+        assertThat(rendered, is("a..\r\n..\r\nb\r\n..c"));
     }
 
     @Test
@@ -39,6 +51,12 @@ public class WhitespaceControlTest {
         String rendered = String.valueOf(template.render().replace(' ', '.'));
 
         assertThat(rendered, is("a..\n..b\n..c"));
+
+        source = "a  \r\n  {% assign letter = 'b' -%}  \r\n{{ letter }}\r\n  c";
+        template = Template.parse(source);
+        rendered = String.valueOf(template.render().replace(' ', '.'));
+
+        assertThat(rendered, is("a..\r\n..b\r\n..c"));
     }
 
     @Test
@@ -49,6 +67,13 @@ public class WhitespaceControlTest {
         String rendered = String.valueOf(template.render().replace(' ', '.'));
 
         assertThat(rendered, is("a..\nb\n..c"));
+
+        source = "a  \r\n  {%- assign letter = 'b' -%}  \r\n{{ letter }}\r\n  c";
+        template = Template.parse(source);
+        rendered = String.valueOf(template.render().replace(' ', '.'));
+
+        assertThat(rendered, is("a..\r\nb\r\n..c"));
+
     }
 
     @Test
@@ -59,6 +84,12 @@ public class WhitespaceControlTest {
         String rendered = String.valueOf(template.render().replace(' ', '.'));
 
         assertThat(rendered, is("a..\n..\nb\n..c"));
+
+        source = "a  \r\n  {%- assign letter = 'b' %}  \r\n{{- letter }}\r\n  c";
+        template = Template.parse(source);
+        rendered = String.valueOf(template.render().replace(' ', '.'));
+
+        assertThat(rendered, is("a..\r\n..\r\nb\r\n..c"));
     }
 
     @Test
@@ -69,6 +100,12 @@ public class WhitespaceControlTest {
         String rendered = String.valueOf(template.render().replace(' ', '.'));
 
         assertThat(rendered, is("a..\n..b..c"));
+
+        source = "a  \r\n  {% assign letter = 'b' -%}  \r\n{{ letter -}}\r\n  c";
+        template = Template.parse(source);
+        rendered = String.valueOf(template.render().replace(' ', '.'));
+
+        assertThat(rendered, is("a..\r\n..b..c"));
     }
 
     @Test
@@ -79,6 +116,12 @@ public class WhitespaceControlTest {
         String rendered = String.valueOf(template.render().replace(' ', '.'));
          
         assertThat(rendered, is("a..\nx\nb..c"));
+
+        source = "a  \r\n  {%- assign letter = 'b' -%}  \r\nx\r\n {{- letter -}}\r\n  c";
+        template = Template.parse(source);
+        rendered = String.valueOf(template.render().replace(' ', '.'));
+         
+        assertThat(rendered, is("a..\r\nx\r\nb..c"));
     }
 
     @Test
@@ -90,6 +133,13 @@ public class WhitespaceControlTest {
         String rendered = String.valueOf(template.render().replace(' ', '.'));
         
         assertThat(rendered, is("a..\nb.\n..c"));
+
+        source = "a  \r\n  {% assign letter = 'b' %}  \r\n{{ letter }} \r\n  c";
+        settings = new ParseSettings.Builder().withStripSpaceAroundTags(true).build();
+        template = Template.parse(source, settings);
+        rendered = String.valueOf(template.render().replace(' ', '.'));
+        
+        assertThat(rendered, is("a..\r\nb.\r\n..c"));
     }
 
     @Test
@@ -101,5 +151,12 @@ public class WhitespaceControlTest {
         String rendered = String.valueOf(template.render().replace(' ', '.'));
 
         assertThat(rendered, is("a..\n\nb\n\n..c"));
+
+        source = "a  \r\n\r\n  {% assign letter = 'b' %}  \r\n{{ letter }}\r\n\r\n  c";
+        settings = new ParseSettings.Builder().withStripSpaceAroundTags(true).build();
+        template = Template.parse(source, settings);
+        rendered = String.valueOf(template.render().replace(' ', '.'));
+
+        assertThat(rendered, is("a..\r\n\r\nb\r\n\r\n..c"));
     }
 }
