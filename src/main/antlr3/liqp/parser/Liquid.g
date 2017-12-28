@@ -421,11 +421,11 @@ other_than_tag_end
 /* lexer rules */
 /*
 OutStartDefaultStrip : {stripSpacesAroundTags}?=> MyWhitespaceChar* '{{' {inTag=true; $type=OutStart;};
-OutEndDefaultStrip   : {stripSpacesAroundTags}?=> '}}' MyWhitespaceChar* MyNewLineChar? {inTag=false; $type=OutEnd;};
+OutEndDefaultStrip   : {stripSpacesAroundTags}?=> '}}' MyWhitespaceChar* MyCarriageReturnChar? MyNewLineChar? {inTag=false; $type=OutEnd;};
 */
 
 TagStartDefaultStrip : {stripSpacesAroundTags}?=> MyNewLineChar? MyWhitespaceChar* '{%' {inTag=true; $type=TagStart;};
-TagEndDefaultStrip   : {stripSpacesAroundTags}?=> '%}' MyWhitespaceChar* MyNewLineChar? {inTag=false; $type=TagEnd;};
+TagEndDefaultStrip   : {stripSpacesAroundTags}?=> '%}' MyWhitespaceChar* MyCarriageReturnChar? MyNewLineChar? {inTag=false; $type=TagEnd;};
 
 /*
 OutStartStrip : WhitespaceChar* '{{-' {inTag=true; $type=OutStart;};
@@ -434,9 +434,9 @@ TagStartStrip : WhitespaceChar* '{%-' {inTag=true; $type=TagStart;};
 TagEndStrip   : '-%}' WhitespaceChar* {inTag=false; $type=TagEnd;};
 */
 OutStartStrip : MyNewLineChar? MyWhitespaceChar* '{{-' {inTag=true; $type=OutStart;};
-OutEndStrip   : '-}}' MyWhitespaceChar* MyNewLineChar? {inTag=false; $type=OutEnd;};
+OutEndStrip   : '-}}' MyWhitespaceChar* MyCarriageReturnChar? MyNewLineChar? {inTag=false; $type=OutEnd;};
 TagStartStrip : MyNewLineChar? MyWhitespaceChar*  '{%-' {inTag=true; $type=TagStart;};
-TagEndStrip   : '-%}' MyWhitespaceChar* MyNewLineChar? {inTag=false; $type=TagEnd;};
+TagEndStrip   : '-%}' MyWhitespaceChar* MyCarriageReturnChar? MyNewLineChar? {inTag=false; $type=TagEnd;};
 
 OutStart : '{{' {inTag=true;};
 OutEnd   : '}}' {inTag=false;};
@@ -524,7 +524,8 @@ NoSpace
 fragment WhitespaceChar : ' ' | '\t' | '\r' | '\n';
 
 fragment MyWhitespaceChar : ' ' | '\t';
-fragment MyNewLineChar : '\r' | '\n';
+fragment MyNewLineChar : '\n';
+fragment MyCarriageReturnChar : '\r' ;
 
 fragment Letter : 'a'..'z' | 'A'..'Z';
 fragment Digit  : '0'..'9';
